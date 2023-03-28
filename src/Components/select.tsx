@@ -33,6 +33,8 @@ export default function SelectComponant() {
 
   const request = async () => {
     const response = await sendQueryToApi(formatStringToIngredien);
+    console.log(response);
+
     if (response) return navigate("/food");
   };
 

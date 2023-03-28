@@ -12,7 +12,7 @@ function App() {
         />
       </div>
 
-      <nav>
+      {/* <nav>
         <ul>
           <li>
             <Link to={`food`}>Food</Link>
@@ -21,7 +21,7 @@ function App() {
             <Link to={`ingredients`}>Ingrediens</Link>
           </li>
         </ul>
-      </nav>
+      </nav> */}
     </div>
   );
 }
