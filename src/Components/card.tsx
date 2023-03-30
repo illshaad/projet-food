@@ -1,12 +1,13 @@
-import { Card, Text, Link } from "@nextui-org/react";
+import { Card, Text } from "@nextui-org/react";
 import SelectComponant from "./select";
 
 interface Props {
   titre: string;
   subTitle: string;
+  nextStep: any;
 }
 
-export default function CardComposant({ titre, subTitle }: Props) {
+export default function CardComposant({ titre, subTitle, nextStep }: Props) {
   return (
     <Card variant="shadow" css={{ mw: "600px" }}>
       <Text
@@ -22,7 +23,7 @@ export default function CardComposant({ titre, subTitle }: Props) {
       <Text css={{ color: "$accents8" }} size={16} weight="bold">
         {subTitle}
       </Text>
-      <SelectComponant />
+      <SelectComponant nextStep={nextStep} />
     </Card>
   );
 }

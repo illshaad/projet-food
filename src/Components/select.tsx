@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+
 import { Badge, Button, Input } from "@nextui-org/react";
 import { sendQueryToApi } from "../services/service";
+import { useDataFood } from "../context/context";
 
 type Flavor = {
   value: string;
   label: string;
 };
 
-export default function SelectComponant() {
+export default function SelectComponant({ nextStep }: { nextStep: any }) {
+  const { setResponse } = useDataFood();
   const [dataIngrediens, setDataIngrediens] = useState<Flavor[]>([]);
   const [ingredien, setIngredien] = useState<string>("");
-  const navigate = useNavigate();
+
   const handleChange = (options: any) => {
     setIngredien(options.target.value);
   };
@@ -21,6 +23,7 @@ export default function SelectComponant() {
       value: ingredien.toLowerCase(),
       label: ingredien,
     };
+    setIngredien("");
     setDataIngrediens((prevArray) => [...prevArray, newIngredient]);
   };
 
@@ -32,10 +35,13 @@ export default function SelectComponant() {
   const formatStringToIngredien = getValue.join("&");
 
   const request = async () => {
-    const response = await sendQueryToApi(formatStringToIngredien);
-    console.log(response);
-
-    if (response) return navigate("/food");
+    try {
+      const res = await sendQueryToApi(formatStringToIngredien);
+      if (setResponse) setResponse(res);
+      if (res && dataIngrediens.length > 0) return nextStep(1);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -46,6 +52,7 @@ export default function SelectComponant() {
           bordered
           onChange={(e) => handleChange(e)}
           placeholder={"tomate, fromage...."}
+          value={ingredien}
         />
         <div>
           <Button onPress={() => addIngredien()} size="sm">
@@ -56,9 +63,9 @@ export default function SelectComponant() {
 
       {dataIngrediens.length > 0 && (
         <div className="flexElementBadge">
-          {dataIngrediens.map(({ value }) => (
+          {dataIngrediens.map(({ value }, index) => (
             <div className="badge">
-              <Badge onClick={() => deleteBadge(value)} isSquared>
+              <Badge key={index} onClick={() => deleteBadge(value)} isSquared>
                 {value}
               </Badge>
             </div>
@@ -90,9 +97,3 @@ export default function SelectComponant() {
     </div>
   );
 }
-
-//    style={{
-//     display: "flex",
-//     justifyContent: "center",
-//     alignItems: "center",
-//   }}
