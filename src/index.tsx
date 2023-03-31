@@ -7,9 +7,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { DataFoodProvider } from "./context/context";
 import Food from "./Components/food";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -24,9 +28,12 @@ const router = createBrowserRouter([
 
 root.render(
   <React.StrictMode>
-    <DataFoodProvider>
-      <RouterProvider router={router} />
-    </DataFoodProvider>
+    <QueryClientProvider client={queryClient}>
+      <DataFoodProvider>
+        <RouterProvider router={router} />
+      </DataFoodProvider>
+      <ReactQueryDevtools initialIsOpen={true} />
+    </QueryClientProvider>
   </React.StrictMode>
 );
 

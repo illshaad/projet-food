@@ -1,14 +1,17 @@
 import React, { useState } from "react";
+import { Text } from "@nextui-org/react";
 import "./App.css";
-import { Link } from "react-router-dom";
 import "animate.css";
 import CardComposant from "./Components/card";
 import Food from "./Components/food";
+import { useDataFood } from "./context/context";
+import FilterComponent from "./Components/filter";
 
 function App() {
+  const { response } = useDataFood();
   const [step, setStep] = useState<number>(0);
 
-  const nextStep = (step: any) => {
+  const nextStep = (step: number) => {
     setStep(step);
   };
 
@@ -19,23 +22,16 @@ function App() {
       subTitle="Donnez une seconde vie à vos ingrédients oubliés"
       nextStep={nextStep}
     />,
-    <Food />,
+    <>
+      <Text>Nombre de plats trouvées {response.length}</Text>
+      <FilterComponent />
+      <Food key={1} />,
+    </>,
   ];
 
   return (
     <div className="App">
       <div className="box">{stepComponent[step]}</div>
-
-      {/* <nav>
-        <ul>
-          <li>
-            <Link to={`food`}>Food</Link>
-          </li>
-          <li>
-            <Link to={`ingredients`}>Ingrediens</Link>
-          </li>
-        </ul>
-      </nav> */}
     </div>
   );
 }

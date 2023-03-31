@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-
 import { Badge, Button, Input } from "@nextui-org/react";
 import { sendQueryToApi } from "../services/service";
 import { useDataFood } from "../context/context";
+
+import { useQuery } from "@tanstack/react-query";
 
 type Flavor = {
   value: string;
@@ -13,11 +14,9 @@ export default function SelectComponant({ nextStep }: { nextStep: any }) {
   const { setResponse } = useDataFood();
   const [dataIngrediens, setDataIngrediens] = useState<Flavor[]>([]);
   const [ingredien, setIngredien] = useState<string>("");
-
   const handleChange = (options: any) => {
     setIngredien(options.target.value);
   };
-
   const addIngredien = () => {
     const newIngredient: Flavor = {
       value: ingredien.toLowerCase(),
@@ -34,15 +33,20 @@ export default function SelectComponant({ nextStep }: { nextStep: any }) {
 
   const formatStringToIngredien = getValue.join("&");
 
-  const request = async () => {
-    try {
-      const res = await sendQueryToApi(formatStringToIngredien);
-      if (setResponse) setResponse(res);
-      if (res && dataIngrediens.length > 0) return nextStep(1);
-    } catch (error) {
-      console.log(error);
+  const getIngredients = async () => {
+    const res = await sendQueryToApi(formatStringToIngredien);
+
+    if (res) {
+      setResponse(res);
+      return nextStep(1);
     }
   };
+
+  useQuery({
+    queryKey: ["ingredients"],
+    queryFn: () => getIngredients(),
+    enabled: false,
+  });
 
   return (
     <div className="degradeHorizontal">
@@ -82,8 +86,8 @@ export default function SelectComponant({ nextStep }: { nextStep: any }) {
         }}
       >
         <Button
+          onClick={() => getIngredients()}
           disabled={!dataIngrediens.length}
-          onPress={() => request()}
           css={{
             fontWeight: "bold",
             background: "$blue600",

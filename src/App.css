@@ -37,3 +37,12 @@
 .badge {
   cursor: pointer;
 }
+
+.arrow {
+  cursor: pointer;
+  padding: 20px;
+  border-radius: 15%;
+  color: white;
+  background: linear-gradient(to right, #adf5cc, #0072f5);
+  box-shadow: 1px 1px 0px #aaa;
+}

@@ -1,6 +1,11 @@
-import { Card, Col, Row, Button, Text, Image } from "@nextui-org/react";
+import { Card, Col, Row, Button, Text } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 import { useDataFood } from "../context/context";
+import {
+  AiOutlineCaretRight,
+  AiOutlineCaretLeft,
+  AiFillStar,
+} from "react-icons/ai";
 
 export default function Food() {
   const { response } = useDataFood();
@@ -8,29 +13,56 @@ export default function Food() {
   const [arraySlice, setArraySlice] = useState<any>([]);
 
   useEffect(() => {
+    //group the response elements by groups of 3 elements in the newArray.
     let newArray: any = [];
-    for (let i = 0; i < response?.length; i += 3) {
-      newArray.push(response?.slice(i, i + 3));
+    for (let i = 0; i < response.length; i += 3) {
+      newArray.push(response.slice(i, i + 3));
     }
     setArraySlice(newArray);
   }, [response]);
 
   const nextIngredients = () => {
-    setCurrentIndex((currentIndex + 1) % arraySlice.length);
+    const newIndex = currentIndex + 1;
+    if (newIndex >= arraySlice.length) {
+      setCurrentIndex(0);
+    } else {
+      setCurrentIndex(newIndex);
+    }
   };
 
   const prevIngredients = () => {
-    setCurrentIndex((currentIndex - 1 + arraySlice.length) % arraySlice.length);
+    const newIndex = currentIndex - 1;
+    if (newIndex < 0) {
+      setCurrentIndex(arraySlice.length - 1);
+    } else {
+      setCurrentIndex(newIndex);
+    }
   };
 
   return (
     <div className="animate__animated animate__lightSpeedInRight flexElementBadge">
-      <Button onClick={() => prevIngredients()}>gauche</Button>
+      <div className="arrow" onClick={() => prevIngredients()}>
+        <AiOutlineCaretLeft style={{ fontSize: 12 }} />
+      </div>
+
       {arraySlice[currentIndex]?.map((e: any, i: any) => (
         <Card key={i} css={{ h: "400px", w: "15vw" }}>
-          <Card.Header css={{ position: "absolute", zIndex: 1, top: 5 }}>
+          <Card.Header
+            css={{
+              position: "absolute",
+              bgBlur: "#ffffff16",
+              borderTop: "$borderWeights$light solid rgba(255, 255, 255, 0.2)",
+              top: 0,
+              zIndex: 1,
+            }}
+          >
             <Col>
-              <Text h3 color="black">
+              <Text
+                h3
+                css={{
+                  textGradient: "45deg, $blue600 70% , $green400 20%",
+                }}
+              >
                 {e.title}
               </Text>
             </Col>
@@ -41,7 +73,7 @@ export default function Food() {
               height="100%"
               width="100%"
               objectFit="cover"
-              alt="Card example background"
+              alt="Cardbackground"
             />
           </Card.Body>
           <Card.Footer
@@ -51,18 +83,16 @@ export default function Food() {
               bgBlur: "#ffffff16",
               borderTop: "$borderWeights$light solid rgba(255, 255, 255, 0.2)",
               bottom: 0,
-              zIndex: 1,
             }}
           >
             <Row align="center" justify="flex-start">
               <Col>
-                <Text color="white" size={12} weight="bold">
+                <Text color="white" size={14} weight="bold">
                   {e.likes}
                 </Text>
+                <AiFillStar style={{ fontSize: 14, color: "yellow" }} />
               </Col>
-              <Col>
-                <Image width={12} src="./star.png" alt="Default Image" />
-              </Col>
+
               <Col>
                 <Row>
                   <Button light>
@@ -82,7 +112,9 @@ export default function Food() {
           </Card.Footer>
         </Card>
       ))}
-      <Button onClick={() => nextIngredients()}>Droite</Button>
+      <div className="arrow" onClick={() => nextIngredients()}>
+        <AiOutlineCaretRight style={{ fontSize: 12 }} />
+      </div>
     </div>
   );
 }
