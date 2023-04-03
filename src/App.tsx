@@ -6,6 +6,7 @@ import CardComposant from "./Components/card";
 import Food from "./Components/food";
 import { useDataFood } from "./context/context";
 import FilterComponent from "./Components/filter";
+import Ingredient from "./Components/ingredients";
 
 function App() {
   const { response } = useDataFood();
@@ -25,8 +26,9 @@ function App() {
     <>
       <Text>Nombre de plats trouvées {response.length}</Text>
       <FilterComponent />
-      <Food key={1} />,
+      <Food key={1} nextStep={nextStep} />,
     </>,
+    <Ingredient />,
   ];
 
   return (

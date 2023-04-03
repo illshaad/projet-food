@@ -42,11 +42,11 @@ export default function SelectComponant({ nextStep }: { nextStep: any }) {
     }
   };
 
-  useQuery({
-    queryKey: ["ingredients"],
-    queryFn: () => getIngredients(),
-    enabled: false,
-  });
+  // useQuery({
+  //   queryKey: ["ingredients"],
+  //   queryFn: () => getIngredients(),
+  //   enabled: false,
+  // });
 
   return (
     <div className="degradeHorizontal">

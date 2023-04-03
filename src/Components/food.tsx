@@ -1,5 +1,5 @@
-import { Card, Col, Row, Button, Text } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
+import { Card, Col, Row, Button, Text } from "@nextui-org/react";
 import { useDataFood } from "../context/context";
 import {
   AiOutlineCaretRight,
@@ -7,7 +7,7 @@ import {
   AiFillStar,
 } from "react-icons/ai";
 
-export default function Food() {
+export default function Food({ nextStep }: any) {
   const { response } = useDataFood();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [arraySlice, setArraySlice] = useState<any>([]);
@@ -39,6 +39,14 @@ export default function Food() {
     }
   };
 
+  // useQuery({
+  //   queryKey: ["getDetailsIngredients", id],
+  //   queryFn: () => getIngredients(),
+  //   enabled: false,
+  // });
+
+  const redirection = (id: number) => id && nextStep(2);
+
   return (
     <div className="animate__animated animate__lightSpeedInRight flexElementBadge">
       <div className="arrow" onClick={() => prevIngredients()}>
@@ -50,6 +58,7 @@ export default function Food() {
           <Card.Header
             css={{
               position: "absolute",
+              background: "red",
               bgBlur: "#ffffff16",
               borderTop: "$borderWeights$light solid rgba(255, 255, 255, 0.2)",
               top: 0,
@@ -58,7 +67,7 @@ export default function Food() {
           >
             <Col>
               <Text
-                h3
+                h5
                 css={{
                   textGradient: "45deg, $blue600 70% , $green400 20%",
                 }}
@@ -72,7 +81,7 @@ export default function Food() {
               src={e.image}
               height="100%"
               width="100%"
-              objectFit="cover"
+              // objectFit="cover"
               alt="Cardbackground"
             />
           </Card.Body>
@@ -95,7 +104,7 @@ export default function Food() {
 
               <Col>
                 <Row>
-                  <Button light>
+                  <Button light onClick={() => redirection(e.id)}>
                     <Text
                       css={{
                         textGradient: "45deg, $blue600 70% , $green400 20%",

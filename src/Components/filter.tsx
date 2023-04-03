@@ -1,4 +1,3 @@
-import React from "react";
 import { Checkbox } from "@nextui-org/react";
 import { useDataFood } from "../context/context";
 import { getFilterAllimentaire } from "../services/service";
@@ -7,10 +6,8 @@ export default function FilterComponent() {
   const { setResponse } = useDataFood();
 
   const filterAllimentaire = async (e: string[]) => {
-    console.log(e);
-
-    // const res = await getFilterAllimentaire(e[0]);
-    // console.log(res);
+    const { results } = await getFilterAllimentaire(e[0]);
+    setResponse(results);
   };
 
   return (
@@ -21,7 +18,7 @@ export default function FilterComponent() {
       color="secondary"
     >
       <Checkbox value="gluten">Sans gluten</Checkbox>
-      <Checkbox value="vegetarian">Vegeterien</Checkbox>
+      <Checkbox value="vegetarian">Vegetarien</Checkbox>
       <Checkbox value="vegan">Vegan</Checkbox>
     </Checkbox.Group>
   );
