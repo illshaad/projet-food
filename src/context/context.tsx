@@ -1,48 +1,50 @@
 import { createContext, useContext, useState, ReactNode } from "react";
-
-interface ListIngredients {
-  id: number;
-  title: string;
-  image: string;
-  imageType: string;
-  usedIngredientCount: number;
-  missedIngredientCount: number;
-  missedIngredients: SedIngredient[];
-  usedIngredients: SedIngredient[];
-  unusedIngredients: any[];
-  likes: number;
-}
-
-interface SedIngredient {
-  id: number;
-  amount: number;
-  unit: string;
-  unitLong: string;
-  unitShort: string;
-  aisle: string;
-  name: string;
-  original: string;
-  originalName: string;
-  meta: string[];
-  extendedName?: string;
-  image: string;
-}
+import { ListIngredients } from "../types/type";
 
 interface IDataFood {
-  response: ListIngredients[];
+  response: Array<ListIngredients>;
   setResponse: React.Dispatch<React.SetStateAction<any>>;
+  recipe: ListIngredients;
+  setRecipe: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const DataFoodContext = createContext<IDataFood>({
   response: [],
   setResponse: () => {},
+  recipe: {
+    id: 0,
+    title: "",
+    image: "",
+    imageType: "",
+    usedIngredientCount: 0,
+    missedIngredientCount: 0,
+    missedIngredients: [],
+    usedIngredients: [],
+    unusedIngredients: [],
+    likes: 0,
+  },
+  setRecipe: () => {},
 });
 
 export const DataFoodProvider = ({ children }: { children: ReactNode }) => {
   const [response, setResponse] = useState<ListIngredients[]>([]);
+  const [recipe, setRecipe] = useState<ListIngredients>({
+    id: 0,
+    title: "",
+    image: "",
+    imageType: "",
+    usedIngredientCount: 0,
+    missedIngredientCount: 0,
+    missedIngredients: [],
+    usedIngredients: [],
+    unusedIngredients: [],
+    likes: 0,
+  });
 
   return (
-    <DataFoodContext.Provider value={{ response, setResponse }}>
+    <DataFoodContext.Provider
+      value={{ response, setResponse, recipe, setRecipe }}
+    >
       {children}
     </DataFoodContext.Provider>
   );

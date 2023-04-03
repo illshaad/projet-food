@@ -8,9 +8,9 @@ import {
 } from "react-icons/ai";
 
 export default function Food({ nextStep }: any) {
-  const { response } = useDataFood();
+  const { response, setRecipe } = useDataFood();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [arraySlice, setArraySlice] = useState<any>([]);
+  const [recipeSlice, setRecipeSlice] = useState<any>([]);
 
   useEffect(() => {
     //group the response elements by groups of 3 elements in the newArray.
@@ -18,12 +18,12 @@ export default function Food({ nextStep }: any) {
     for (let i = 0; i < response.length; i += 3) {
       newArray.push(response.slice(i, i + 3));
     }
-    setArraySlice(newArray);
+    setRecipeSlice(newArray);
   }, [response]);
 
   const nextIngredients = () => {
     const newIndex = currentIndex + 1;
-    if (newIndex >= arraySlice.length) {
+    if (newIndex >= recipeSlice.length) {
       setCurrentIndex(0);
     } else {
       setCurrentIndex(newIndex);
@@ -33,19 +33,24 @@ export default function Food({ nextStep }: any) {
   const prevIngredients = () => {
     const newIndex = currentIndex - 1;
     if (newIndex < 0) {
-      setCurrentIndex(arraySlice.length - 1);
+      setCurrentIndex(recipeSlice.length - 1);
     } else {
       setCurrentIndex(newIndex);
     }
   };
 
   // useQuery({
-  //   queryKey: ["getDetailsIngredients", id],
+  //   queryKey: ["getDetailsIngredients"],
   //   queryFn: () => getIngredients(),
   //   enabled: false,
   // });
 
-  const redirection = (id: number) => id && nextStep(2);
+  const redirection = (recipeInformatioN: []) => {
+    if (recipeInformatioN) {
+      setRecipe(recipeInformatioN);
+      nextStep(2);
+    }
+  };
 
   return (
     <div className="animate__animated animate__lightSpeedInRight flexElementBadge">
@@ -53,7 +58,7 @@ export default function Food({ nextStep }: any) {
         <AiOutlineCaretLeft style={{ fontSize: 12 }} />
       </div>
 
-      {arraySlice[currentIndex]?.map((e: any, i: any) => (
+      {recipeSlice[currentIndex]?.map((recipe: any, i: any) => (
         <Card key={i} css={{ h: "400px", w: "15vw" }}>
           <Card.Header
             css={{
@@ -72,13 +77,13 @@ export default function Food({ nextStep }: any) {
                   textGradient: "45deg, $blue600 70% , $green400 20%",
                 }}
               >
-                {e.title}
+                {recipe.title}
               </Text>
             </Col>
           </Card.Header>
           <Card.Body css={{ p: 0 }}>
             <Card.Image
-              src={e.image}
+              src={recipe.image}
               height="100%"
               width="100%"
               // objectFit="cover"
@@ -97,14 +102,14 @@ export default function Food({ nextStep }: any) {
             <Row align="center" justify="flex-start">
               <Col>
                 <Text color="white" size={14} weight="bold">
-                  {e.likes}
+                  {recipe.likes}
                 </Text>
                 <AiFillStar style={{ fontSize: 14, color: "yellow" }} />
               </Col>
 
               <Col>
                 <Row>
-                  <Button light onClick={() => redirection(e.id)}>
+                  <Button light onClick={() => redirection(recipe)}>
                     <Text
                       css={{
                         textGradient: "45deg, $blue600 70% , $green400 20%",

@@ -24,7 +24,7 @@ function App() {
       nextStep={nextStep}
     />,
     <>
-      <Text>Nombre de plats trouvées {response.length}</Text>
+      {/* <Text>Nombre de plats trouvées {response.length}</Text> */}
       <FilterComponent />
       <Food key={1} nextStep={nextStep} />,
     </>,

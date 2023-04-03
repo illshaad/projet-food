@@ -35,18 +35,18 @@ export default function SelectComponant({ nextStep }: { nextStep: any }) {
 
   const getIngredients = async () => {
     const res = await sendQueryToApi(formatStringToIngredien);
-
     if (res) {
       setResponse(res);
       return nextStep(1);
     }
   };
 
-  // useQuery({
+  // const { data } = useQuery({
   //   queryKey: ["ingredients"],
   //   queryFn: () => getIngredients(),
   //   enabled: false,
   // });
+  // lgo
 
   return (
     <div className="degradeHorizontal">
@@ -55,7 +55,7 @@ export default function SelectComponant({ nextStep }: { nextStep: any }) {
           clearable
           bordered
           onChange={(e) => handleChange(e)}
-          placeholder={"tomate, fromage...."}
+          placeholder={"tomato, cheese...."}
           value={ingredien}
         />
         <div>
